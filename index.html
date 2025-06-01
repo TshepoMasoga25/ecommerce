@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tech Retail</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  Tech Retail Store
+</header>
+
+<nav>
+  <select id="tab-select" aria-label="Select page section">
+    <option value="products" selected>Products</option>
+    <option value="sell">Sell</option>
+    <option value="login">Login</option>
+    <option value="payments">Payments</option>
+    <option value="literacy">Digital Literacy</option>
+    <option value="logistics">Logistics</option>
+    <option value="empowerment">Empowerment</option>
+  </select>
+</nav>
+
+<main>
+  <section id="products" class="active">
+    <h2>Featured Products</h2>
+    <div class="product-list">
+      <article class="product-card">
+        <img src="images/ipad.jpeg" alt="iPad" />
+        <div class="product-info">
+          <div class="product-title">iPad</div>
+          <div class="product-price">R19000.00</div>
+          <button class="btn">Buy Now</button>
+        </div>
+      </article>
+      <article class="product-card">
+        <img src="images/iphone.jpeg" alt="iPhone" />
+        <div class="product-info">
+          <div class="product-title">Iphone 13</div>
+          <div class="product-price">R12,500.00</div>
+          <button class="btn">Buy Now</button>
+        </div>
+      </article>
+      <article class="product-card">
+        <img src="images/hp-laptop.jpeg" alt="HP Laptop" />
+        <div class="product-info">
+          <div class="product-title">HP Laptop</div>
+          <div class="product-price">R15,800.00</div>
+          <button class="btn">Buy Now</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="sell">
+    <form id="sell-form" action="process_sell.php" method="POST" enctype="multipart/form-data">
+      <h2>Sell a Product</h2>
+      <label for="product-name">Product Name</label>
+      <input type="text" id="product-name" name="product-name" required />
+      <label for="product-price">Price (ZAR)</label>
+      <input type="number" id="product-price" name="product-price" required />
+      <label for="product-image">Product Image</label>
+      <input type="file" id="product-image" name="product-image" accept="image/*" required />
+      <button class="btn" type="submit">List Product</button>
+    </form>
+    <div id="image-preview">
+      <h3>Image Preview:</h3>
+      <img id="preview-img" src="" alt="Image preview" />
+    </div>
+  </section>
+
+  <section id="login">
+    <form>
+      <h2>User Login</h2>
+      <label for="email">Email address</label>
+      <input type="email" id="email" required />
+      <label for="password">Password</label>
+      <input type="password" id="password" required />
+      <label><input type="checkbox" id="mfa" /> Use Multi-Factor Authentication</label>
+      <button class="btn" type="submit">Login</button>
+      <div class="info-box">
+        <strong>Fraud Protection:</strong> Multi-factor authentication, device fingerprinting, and real-time fraud monitoring protect your account.
+      </div>
+    </form>
+  </section>
+
+  <section id="payments">
+    <h2>Payment Options</h2>
+    <form id="delivery-form" style="max-width: 420px; margin-bottom: 1.5rem;">
+      <label for="delivery-option"><strong>Choose Delivery Option:</strong></label>
+      <select id="delivery-option" name="delivery-option" required>
+        <option value="" disabled selected>Select delivery method</option>
+        <option value="postnet">PostNet (R99, 2-4 days, tracking included)</option>
+        <option value="courier-guy">The Courier Guy (R120, 1-2 days, door-to-door)</option>
+        <option value="pep-paxi">PEP Paxi (R60, 3-5 days, pickup at PEP store)</option>
+        <option value="fedex">FedEx (R250, overnight, national/international)</option>
+      </select>
+    </form>
+    <div id="payment-method-select" style="margin-bottom: 1.2rem;">
+      <label>
+        <input type="radio" name="payment-method" value="payfast" checked>
+        <strong>PayFast</strong>
+      </label>
+      &nbsp;&nbsp;
+      <label>
+        <input type="radio" name="payment-method" value="ozow">
+        <strong>Ozow</strong>
+      </label>
+    </div>
+    <div id="payfast-container">
+      <form id="payfast-form" action="https://www.payfast.co.za/eng/process" method="post" style="max-width: 420px; margin-bottom: 2rem;">
+        <h3>Pay with PayFast</h3>
+        <input type="hidden" name="merchant_id" value="10000100" />
+        <input type="hidden" name="merchant_key" value="46f0cd694581a" />
+        <input type="hidden" name="return_url" value="https://yourdomain.com/payment-success" />
+        <input type="hidden" name="cancel_url" value="https://yourdomain.com/payment-cancel" />
+        <input type="hidden" name="notify_url" value="https://yourdomain.com/payfast-notify" />
+        <input type="hidden" id="payfast-delivery" name="custom_delivery_option" value="" />
+        <label for="pf-amount">Amount (ZAR):</label>
+        <input type="number" id="pf-amount" name="amount" value="" step="0.01" required />
+        <label for="pf-item-name">Item Name:</label>
+        <input type="text" id="pf-item-name" name="item_name" value="" required />
+        <button class="btn" type="submit">Pay with PayFast</button>
+      </form>
+    </div>
+    <div id="ozow-container" style="display: none;">
+      <form id="ozow-form" action="https://pay.ozow.com" method="post" style="max-width: 420px;">
+        <h3>Pay with Ozow</h3>
+        <input type="hidden" name="merchantId" value="get_tech" />
+        <input type="hidden" name="returnUrl" value="https://yourdomain.com/ozow-success" />
+        <input type="hidden" name="cancelUrl" value="https://yourdomain.com/ozow-cancel" />
+        <input type="hidden" name="hash" value="SERVER_GENERATED_HASH" />
+        <input type="hidden" id="ozow-delivery" name="custom_delivery_option" value="" />
+        <label for="ozow-amount">Amount (ZAR):</label>
+        <input type="number" id="ozow-amount" name="amount" value="" step="0.01" required />
+        <label for="ozow-reference">Reference:</label>
+        <input type="text" id="ozow-reference" name="reference" value="" required />
+        <button class="btn" type="submit">Pay with Ozow</button>
+      </form>
+    </div>
+    <div class="info-box">
+      <strong>Secure Payments:</strong> All payments are processed securely. Your payment info is never stored on our servers.
+    </div>
+  </section>
+
+  <section id="literacy">
+    <h2>Digital Literacy & Safety</h2>
+    <ul>
+      <li>Free workshops and webinars.</li>
+      <li>Guides on spotting scams and privacy.</li>
+      <li>Community forums for peer support.</li>
+      <li>Digital skills tutorials for new users.</li>
+    </ul>
+    <div class="info-box">
+      <strong>Tip:</strong> Use secure payment methods.
+    </div>
+  </section>
+
+  <section id="logistics">
+    <h2>Delivery & Logistics Partners</h2>
+    <ul>
+      <li><strong>PostNet</strong>: Local and international delivery.</li>
+      <li><strong>The Courier Guy</strong>: Affordable parcel delivery.</li>
+      <li><strong>PEP Paxi</strong>: Has a network of pickup points within PEP stores.</li>
+      <li><strong>FedEx</strong>: Local, national & international delivery.</li>
+    </ul>
+    <div class="info-box">
+      Choose your delivery option at checkout. All partners offer tracking.
+    </div>
+  </section>
+
+  <section id="empowerment">
+    <h2>Empowering South Africans</h2>
+    <ul>
+      <li>Access new markets nationwide.</li>
+      <li>Encourages entrepreneurship and job creation.</li>
+      <li>Digital skills training and resources.</li>
+      <li>Support for rural and township sellers.</li>
+    </ul>
+    <div class="info-box">
+      <strong>Start selling today!</strong> Grow your business and reach buyers across South Africa.
+    </div>
+  </section>
+</main>
+
+<footer>
+  © 2025 Tech Retail Store. All rights reserved.
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
