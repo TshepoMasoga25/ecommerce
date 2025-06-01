@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mzansi Market Admin Dashboard (Blue & Orange)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0; background: #f0f4f8; color: #222;
+    }
+    header {
+      background: #005f99;
+      color: white;
+      padding: 1.2rem;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background: white;
+      padding: 0.6rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    nav a {
+      color: rgb(0, 0, 0);
+      margin: 0 1.2rem;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    nav a.active, nav a:hover {
+      background: #005f99;
+      text-decoration: none;
+    }
+    main {
+      max-width: 960px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+    section {
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #dff3ff;
+      color: #005f99;
+      font-weight: 700;
+    }
+    tr:hover {
+      background: #f9faff;
+    }
+    .btn {
+      background: #005f99;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background: #005f99;
+    }
+    form {
+      margin: 1rem 0 2rem;
+      background: white;
+      padding: 1.2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 480px;
+    }
+    label {
+      display: block;
+      margin-top: 0.6rem;
+      font-weight: 600;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      border: 1.5px solid #ccc;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    input:focus, select:focus {
+      border-color: #005f99;
+      outline: none;
+    }
+    .info-box {
+      background: #dff3ff;
+      border-left: 5px solid #005f99;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      color: #004466;
+      font-weight: 600;
+    }
+    footer {
+      background: #003d66;
+      color: white;
+      text-align: center;
+      padding: 1.2rem;
+      margin-top: 3rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  Mzansi Market Admin Dashboard
+</header>
+
+<nav>
+  <a href="#" class="active" data-tab="users">Users</a>
+  <a href="#" data-tab="roles">Roles</a>
+</nav>
+
+<main>
+  <section id="users" class="active">
+    <h2>User Management</h2>
+    <form id="user-form">
+      <label for="username">Username</label>
+      <input type="text" id="username" required />
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
+      <label for="role">Role</label>
+      <select id="role">
+        <option value="customer">Customer</option>
+        <option value="seller">Seller</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button class="btn" type="submit">Add User</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr><th>Username</th><th>Email</th><th>Role</th><th>Actions</th></tr>
+      </thead>
+      <tbody id="user-list">
+      </tbody>
+    </table>
+
+    <div class="info-box">
+      <strong>Role Restrictions:</strong> Only admins can manage users and roles. Sellers manage their products. Customers buy/sell.
+    </div>
+  </section>
+
+  <section id="roles">
+    <h2>Role Management</h2>
+    <form id="role-form">
+      <label for="role-name">Role Name</label>
+      <input type="text" id="role-name" required />
+      <button class="btn" type="submit">Add Role</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr><th>Role Name</th><th>Actions</th></tr>
+      </thead>
+      <tbody id="role-list">
+        <tr><td>customer</td><td></td></tr>
+        <tr><td>seller</td><td></td></tr>
+        <tr><td>admin</td><td></td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<footer>
+  © 2025 Mzansi Market. Admin Portal.
+</footer>
+
+<script>
+  const navLinks = document.querySelectorAll('nav a');
+  const sections = document.querySelectorAll('main section');
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+      sections.forEach(s => s.classList.remove('active'));
+      document.getElementById(link.dataset.tab).classList.add('active');
+    });
+  });
+
+  let users = [
+    {username: "Bucks", email: "bucks@gmail.com", role: "admin"},
+    {username: "Tshepo", email: "tshepo@gmail.com", role: "customer"},
+    {username: "Thato", email: "thato@gmail.com", role: "seller"}
+  ];
+
+  function renderUsers() {
+    const userList = document.getElementById('user-list');
+    userList.innerHTML = '';
+    users.forEach((u, i) => {
+      userList.innerHTML += `
+        <tr>
+          <td>${u.username}</td>
+          <td>${u.email}</td>
+          <td>${u.role}</td>
+          <td>
+            <button class="btn" onclick="editUser(${i})">Edit</button>
+            <button class="btn" onclick="deleteUser(${i})">Delete</button>
+          </td>
+        </tr>`;
+    });
+  }
+
+  window.editUser = function(i) {
+    const u = users[i];
+    document.getElementById('username').value = u.username;
+    document.getElementById('email').value = u.email;
+    document.getElementById('role').value = u.role;
+    users.splice(i, 1);
+    renderUsers();
+  }
+
+  window.deleteUser = function(i) {
+    users.splice(i, 1);
+    renderUsers();
+  }
+
+  document.getElementById('user-form').onsubmit = function(e) {
+    e.preventDefault();
+    users.push({
+      username: document.getElementById('username').value,
+      email: document.getElementById('email').value,
+      role: document.getElementById('role').value
+    });
+    this.reset();
+    renderUsers();
+  }
+
+  renderUsers();
+
+  document.getElementById('role-form').onsubmit = function(e) {
+    e.preventDefault();
+    const roleName = document.getElementById('role-name').value;
+    const roleList = document.getElementById('role-list');
+    roleList.innerHTML += `<tr><td>${roleName}</td><td></td></tr>`;
+    this.reset();
+  }
+</script>
+
+</body>
+</html>
